@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import storage from '@/services/storage';
-import { SidebarProvider } from '@pacepard/ui/sidebar';
+import { SidebarProvider } from '@onaeko/ui/sidebar';
 import AppSidebar from '../base/navigation/side-nav';
 import NavBar from '../base/navigation/NavBar';
-import { Toaster } from '@pacepard/ui/sonner';
-import { cn } from '@pacepard/ui';
+import { Toaster } from '@onaeko/ui/sonner';
+import { cn } from '@onaeko/ui';
 import useContextType from '@/context/useContextType';
 import useAuth from '@/hooks/app/useAuth';
-import { PacepardAPI } from '@/api/base/config';
+import { OnaekoAPI } from '@/api/base/config';
 import { getOnboardingRoute } from '@/utils/onboarding';
 import { RouteURL } from '@/routes/paths';
 import { NODE_ENV, NodeEnv } from '@/utils/enums.util';
@@ -37,7 +37,7 @@ const DashboardLayout = () => {
 
         const hasSession = storage.checkToken() && storage.checkUserID();
         if (!hasSession) {
-            void PacepardAPI.auth.logout();
+            void OnaekoAPI.auth.logout();
             navigate(RouteURL.login, { replace: true });
             return;
         }
@@ -46,7 +46,7 @@ const DashboardLayout = () => {
         (async () => {
             try {
                 const statusResponse =
-                    await PacepardAPI.user.getOnboardingStatus();
+                    await OnaekoAPI.user.getOnboardingStatus();
                 if (cancelled || statusResponse.error !== false) return;
                 const data = statusResponse.data as
                     | {
