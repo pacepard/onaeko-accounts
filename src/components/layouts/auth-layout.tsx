@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import AuthHeader from '../base/auth/auth-header';
 import { TermsAndPrivacy } from '../base/auth/terms-and-privacy';
 import OnaekoIcon from '../base/common/LogoIcon';
-import { Toaster } from '@pacepard/ui/sonner';
+import { Toaster } from '@onaeko/ui/sonner';
 
 interface IAuthLayout {
     title: string;
