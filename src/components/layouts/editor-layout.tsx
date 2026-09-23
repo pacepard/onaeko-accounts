@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
-import { Toaster } from '@pacepard/ui/sonner';
-import { cn } from '@pacepard/ui';
+import { Toaster } from '@onaeko/ui/sonner';
+import { cn } from '@onaeko/ui';
 import EditorHeader from '../base/editor/header';
 
 interface IEditorLayout {
