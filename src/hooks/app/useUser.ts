@@ -11,7 +11,7 @@ import {
 import type { IListQuery } from '@/utils/interfaces.util';
 import type { ICollection } from '@/context/helpers/interface';
 import useNetwork from '../shared/useNetwork';
-import { PacepardAPI } from '@/api/base/config';
+import { OnaekoAPI } from '@/api/base/config';
 
 interface ISendUsersUpdate {
     title: string;
@@ -71,7 +71,7 @@ const useUser = () => {
         async (data: IListQuery, all: boolean = false) => {
             setLoading({ option: 'resource', type: GET_USERS });
 
-            const response = await PacepardAPI.user.getUsers(data, all);
+            const response = await OnaekoAPI.user.getUsers(data, all);
 
             if (response.error === false) {
                 if (response.status === 200) {
@@ -98,7 +98,7 @@ const useUser = () => {
                 });
 
                 if (response.status === 401) {
-                    PacepardAPI.auth.logout();
+                    OnaekoAPI.auth.logout();
                 } else if (
                     response.message &&
                     response.message === 'Error: Network Error'
@@ -118,7 +118,7 @@ const useUser = () => {
 
             setLoading({ option: 'default' });
 
-            const response = await PacepardAPI.user.getUser(userId);
+            const response = await OnaekoAPI.user.getUser(userId);
 
             if (response.error === false) {
                 setResource(GET_LOGGEDIN_USER, response.data);
@@ -136,7 +136,7 @@ const useUser = () => {
                 });
 
                 if (response.status === 401) {
-                    PacepardAPI.auth.logout();
+                    OnaekoAPI.auth.logout();
                 } else if (
                     response.message &&
                     response.message === 'Error: Network Error'
@@ -154,7 +154,7 @@ const useUser = () => {
         async (data: IListQuery) => {
             setLoading({ option: 'resource', type: GET_TALENTS });
 
-            const response = await PacepardAPI.user.getTalents(data);
+            const response = await OnaekoAPI.user.getTalents(data);
 
             if (response.error === false) {
                 if (response.status === 200) {
@@ -181,7 +181,7 @@ const useUser = () => {
                 });
 
                 if (response.status === 401) {
-                    PacepardAPI.auth.logout();
+                    OnaekoAPI.auth.logout();
                 } else if (
                     response.message &&
                     response.message === 'Error: Network Error'
@@ -203,7 +203,7 @@ const useUser = () => {
 
             setLoading({ option: 'default' });
 
-            const response = await PacepardAPI.user.getTalent(userId);
+            const response = await OnaekoAPI.user.getTalent(userId);
 
             if (response.error === false) {
                 setResource(GET_TALENT, response.data);
@@ -221,7 +221,7 @@ const useUser = () => {
                 });
 
                 if (response.status === 401) {
-                    PacepardAPI.auth.logout();
+                    OnaekoAPI.auth.logout();
                 } else if (
                     response.message &&
                     response.message === 'Error: Network Error'
@@ -239,7 +239,7 @@ const useUser = () => {
         async (data: ISendUsersUpdate) => {
             setLoading({ option: 'loader' });
 
-            const response = await PacepardAPI.user.sendUsersUpdate(data);
+            const response = await OnaekoAPI.user.sendUsersUpdate(data);
 
             if (response.error === false) {
                 unsetLoading({ option: 'loader', message: 'successful' });
@@ -252,7 +252,7 @@ const useUser = () => {
                 });
 
                 if (response.status === 401) {
-                    PacepardAPI.auth.logout();
+                    OnaekoAPI.auth.logout();
                 } else if (
                     response.message &&
                     response.message === 'Error: Network Error'
@@ -274,7 +274,7 @@ const useUser = () => {
         async (data: IInviteTalent) => {
             setLoading({ option: 'loader' });
 
-            const response = await PacepardAPI.user.inviteTalent(data);
+            const response = await OnaekoAPI.user.inviteTalent(data);
 
             if (response.error === false) {
                 unsetLoading({ option: 'loader', message: 'successful' });
@@ -287,7 +287,7 @@ const useUser = () => {
                 });
 
                 if (response.status === 401) {
-                    PacepardAPI.auth.logout();
+                    OnaekoAPI.auth.logout();
                 } else if (
                     response.message &&
                     response.message === 'Error: Network Error'
