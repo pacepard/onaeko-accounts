@@ -1,16 +1,17 @@
-import { Button } from '@pacepard/ui/button';
-import { Input } from '@pacepard/ui/input';
-import { Label } from '@pacepard/ui/label';
+import { Button } from '@onaeko/ui/button';
+import { Input } from '@onaeko/ui/input';
+import { Label } from '@onaeko/ui/label';
 import { useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { verifyOtpSchema } from './validation';
 import type { VerifyOtpFormValues } from './validation';
-import { toast } from '@pacepard/ui';
-import { useNavigate } from 'react-router-dom';
+import { toast } from '@onaeko/ui';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { destinationAfterAuth, goAfterAuth } from '@/utils/post-auth';
 import { OtpType } from '@/utils/enums.util';
 import storage, { persistAuthFromResponse } from '@/services/storage';
-import { PacepardAPI } from '@/api/base/config';
+import { OnaekoAPI } from '@/api/base/config';
 import { Loader2 } from 'lucide-react';
 interface OtpFormProps {
     className?: string;
@@ -33,6 +34,7 @@ const OtpForm = ({
     ...props
 }: OtpFormProps) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
     const [resendCountdown, setResendCountdown] = useState(0);
 
@@ -123,12 +125,12 @@ const OtpForm = ({
             // Use activateUser for account activation, verifyOTP for other OTP types
             const response =
                 otpType === OtpType.ACTIVATEACCOUNT
-                    ? await PacepardAPI.auth.activateUser({
+                    ? await OnaekoAPI.auth.activateUser({
                           email: cleanEmail(),
                           otp: Number(otp),
                           otpType,
                       })
-                    : await PacepardAPI.auth.verifyOTP({
+                    : await OnaekoAPI.auth.verifyOTP({
                           email: cleanEmail(),
                           otp: Number(otp),
                           otpType,
@@ -148,10 +150,16 @@ const OtpForm = ({
                     persistAuthFromResponse(response);
                 }
                 onSuccess?.();
-                if (redirectTo) {
+                if (otpType === OtpType.ACTIVATEACCOUNT) {
+                    const dest = destinationAfterAuth(location.search);
+                    toast.success(successMessage);
+                    goAfterAuth(dest, navigate);
+                } else if (redirectTo) {
                     navigate(redirectTo);
+                    toast.success(successMessage);
+                } else {
+                    toast.success(successMessage);
                 }
-                toast.success(successMessage);
             }
         } catch (error) {
             // Use React Hook Form's setError for unexpected errors
@@ -180,7 +188,7 @@ const OtpForm = ({
         otpRefs.current[0]?.focus();
 
         try {
-            const response = await PacepardAPI.auth.resendOTP({
+            const response = await OnaekoAPI.auth.resendOTP({
                 email: resendEmail,
                 otpType,
             });
