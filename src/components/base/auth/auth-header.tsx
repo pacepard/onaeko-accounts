@@ -1,4 +1,4 @@
-import { Button } from '@pacepard/ui/button';
+import { Button } from '@onaeko/ui/button';
 import { ArrowRight } from 'lucide-react';
 
 interface IAuthHeader {
