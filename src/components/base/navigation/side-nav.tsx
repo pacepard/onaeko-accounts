@@ -19,7 +19,7 @@ import {
     SidebarMenuItem,
     SidebarRail,
     useSidebar,
-} from '@pacepard/ui/sidebar';
+} from '@onaeko/ui/sidebar';
 import Logo from '@/components/base/common/Logo';
 import LogoIcon from '@/components/base/common/LogoIcon';
 import sidebarRoutes from '@/routes/sidebar.route';
@@ -76,7 +76,7 @@ function SidebarBrand() {
         <Link
             to={RouteURL.myAccount}
             className="flex items-center px-2 py-1"
-            aria-label="Pacepard Accounts home"
+            aria-label="Onaeko Accounts home"
         >
             {collapsed ? (
                 <LogoIcon width={28} height={28} />
