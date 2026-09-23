@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import OnaekoLogo from '../base/common/Logo';
-import { Toaster } from '@pacepard/ui/sonner';
+import { Toaster } from '@onaeko/ui/sonner';
 
 interface IOnboardingLayout {
     title: string;
