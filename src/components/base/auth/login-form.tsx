@@ -1,7 +1,7 @@
 // src/components/shared/auth/register-form.tsx
-import { Button } from '@pacepard/ui/button';
-import { Input } from '@pacepard/ui/input';
-import { Label } from '@pacepard/ui/label';
+import { Button } from '@onaeko/ui/button';
+import { Input } from '@onaeko/ui/input';
+import { Label } from '@onaeko/ui/label';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,15 +10,19 @@ import type { RegisterFormValues } from './validation';
 import zxcvbn from 'zxcvbn';
 import { Loader2, Mail, Eye, EyeOff, Lock } from 'lucide-react';
 import { strengthColors } from '@/utils/helpers';
-import { OAuthButtons } from './oauth-buttons';
-import { PacepardAPI } from '@/api/base/config';
-import { toast } from '@pacepard/ui';
-import { useNavigate } from 'react-router-dom';
+import { OnaekoAPI } from '@/api/base/config';
+import { toast } from '@onaeko/ui';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { persistAuthFromResponse } from '@/services/storage';
-import { getOnboardingRoute } from '@/utils/onboarding';
-import { RouteURL } from '@/routes/paths';
+import {
+    destinationAfterAuth,
+    goAfterAuth,
+    rememberNextFromSearch,
+} from '@/utils/post-auth';
+import { OAuthButtons } from './oauth-buttons';
 const LoginForm = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [showPassword, setShowPassword] = useState(false);
     const [passwordScore, setPasswordScore] = useState(0);
     const [_feedback, setFeedback] = useState<string[]>([]);
@@ -50,7 +54,7 @@ const LoginForm = () => {
 
     const onSubmit = async (data: RegisterFormValues) => {
         try {
-            const response = await PacepardAPI.auth.loginUser({
+            const response = await OnaekoAPI.auth.loginUser({
                 email: data.email,
                 password: data.password,
             });
@@ -65,45 +69,13 @@ const LoginForm = () => {
                         'Invalid email or password',
                 });
             } else {
-                if (response.data?.token) {
+                if (response.data?.token || response.token) {
                     persistAuthFromResponse(response);
                 }
-
-                // Check onboarding status and route accordingly
-                try {
-                    const onboardingStatus =
-                        await PacepardAPI.user.getOnboardingStatus();
-
-                    if (
-                        onboardingStatus.error === false &&
-                        onboardingStatus.data
-                    ) {
-                        const statusData = onboardingStatus.data as any;
-                        const step = statusData.step || 0;
-                        const status = statusData.status || 'not-started';
-                        const userType = statusData.userType;
-
-                        // Get the appropriate route based on onboarding status
-                        const route = getOnboardingRoute(
-                            step,
-                            status,
-                            userType,
-                        );
-                        navigate(route);
-
-                        // Only show success toast if going to dashboard (onboarding completed)
-                        if (status === 'completed') {
-                            toast.success('Login successful!');
-                        }
-                    } else {
-                        navigate(RouteURL.onboarding);
-                        toast.success('Login successful!');
-                    }
-                } catch (error) {
-                    console.error('Error checking onboarding status:', error);
-                    navigate(RouteURL.onboarding);
-                    toast.success('Login successful!');
-                }
+                rememberNextFromSearch(location.search);
+                const dest = destinationAfterAuth(location.search);
+                toast.success('Login successful!');
+                goAfterAuth(dest, navigate);
             }
         } catch (error) {
             // Use React Hook Form's setError for unexpected errors
