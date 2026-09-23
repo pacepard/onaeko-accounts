@@ -1,14 +1,14 @@
-import { Button } from '@pacepard/ui/button';
-import { Input } from '@pacepard/ui/input';
-import { Label } from '@pacepard/ui/label';
+import { Button } from '@onaeko/ui/button';
+import { Input } from '@onaeko/ui/input';
+import { Label } from '@onaeko/ui/label';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordSchema } from './validation';
 import type { ResetPasswordFormValues } from './validation';
 import { Loader2, Eye, EyeOff, Lock } from 'lucide-react';
-import { PacepardAPI } from '@/api/base/config';
-import { toast } from '@pacepard/ui';
+import { OnaekoAPI } from '@/api/base/config';
+import { toast } from '@onaeko/ui';
 import { useNavigate } from 'react-router-dom';
 import storage from '@/services/storage';
 import zxcvbn from 'zxcvbn';
@@ -68,7 +68,7 @@ const ResetPasswordForm = () => {
         }
 
         try {
-            const resetResponse = await PacepardAPI.auth.resetPassword({
+            const resetResponse = await OnaekoAPI.auth.resetPassword({
                 email,
                 newPassword: data.newPassword,
             });
