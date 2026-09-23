@@ -1,6 +1,6 @@
-import { Button } from '@pacepard/ui/button';
-import { Input } from '@pacepard/ui/input';
-import { Label } from '@pacepard/ui/label';
+import { Button } from '@onaeko/ui/button';
+import { Input } from '@onaeko/ui/input';
+import { Label } from '@onaeko/ui/label';
 import { useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,8 +13,8 @@ import type {
     VerifyOtpFormValues,
 } from './validation';
 import { Loader2, Mail } from 'lucide-react';
-import { PacepardAPI } from '@/api/base/config';
-import { toast } from '@pacepard/ui';
+import { OnaekoAPI } from '@/api/base/config';
+import { toast } from '@onaeko/ui';
 import { useNavigate } from 'react-router-dom';
 import storage from '@/services/storage';
 import { OtpType } from '@/utils/enums.util';
@@ -82,7 +82,7 @@ const ForgotPasswordForm = ({
             // Store email in localStorage
             storage.keepLegacy('userEmail', data.email);
 
-            const response = await PacepardAPI.auth.forgotPassword({
+            const response = await OnaekoAPI.auth.forgotPassword({
                 email: data.email,
             });
 
@@ -168,7 +168,7 @@ const ForgotPasswordForm = ({
 
     const handleOtpSubmit = async (data: VerifyOtpFormValues) => {
         try {
-            const response = await PacepardAPI.auth.verifyOTP({
+            const response = await OnaekoAPI.auth.verifyOTP({
                 email,
                 otp: Number(data.otp),
                 otpType: OtpType.FORGOTPASSWORD,
@@ -203,7 +203,7 @@ const ForgotPasswordForm = ({
         otpRefs.current[0]?.focus();
 
         try {
-            const response = await PacepardAPI.auth.resendOTP({
+            const response = await OnaekoAPI.auth.resendOTP({
                 email,
                 otpType: OtpType.FORGOTPASSWORD,
             });
