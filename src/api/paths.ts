@@ -1,6 +1,6 @@
 /**
  * Backend HTTP paths (axios baseURL + path).
- * Aligned with pacepard-api / @pacepard/sdk — not browser routes.
+ * Aligned with onaeko-api / @onaeko/sdk — not browser routes.
  */
 
 export const ApiPath = {
@@ -15,7 +15,7 @@ export const ApiPath = {
     resendOtp: '/auth/resend-otp',
     token: '/auth/token',
     logout: '/auth/logout',
-    loggedInUser: '/auth/user',
+    loggedInUser: '/user/',
     continue: '/auth/continue',
 
     // OAuth
