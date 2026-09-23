@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PacepardAPI } from '@/api/base/config';
+import { OnaekoAPI } from '@/api/base/config';
 import storage from '@/services/storage';
 import { RouteURL } from '@/routes/paths';
 import useAuth from '@/hooks/app/useAuth';
-import { Button } from '@pacepard/ui/button';
+import { Button } from '@onaeko/ui/button';
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from '@pacepard/ui/card';
+} from '@onaeko/ui/card';
 
 /** Signed-in Accounts home body — no DashboardLayout wrap (shell owns Outlet). */
 export default function Dashboard() {
@@ -29,7 +29,7 @@ export default function Dashboard() {
 
         (async () => {
             try {
-                const response = await PacepardAPI.user.getUser();
+                const response = await OnaekoAPI.user.getUser();
                 if (!cancelled && response.error === false && response.data) {
                     setUser(
                         response.data as {
@@ -74,7 +74,7 @@ export default function Dashboard() {
                         : `Welcome${displayName ? `, ${displayName}` : ''}`}
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                    Manage your Pacepard account settings and security from here.
+                    Manage your Onaeko account settings and security from here.
                 </p>
             </div>
 
