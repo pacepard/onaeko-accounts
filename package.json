@@ -1,9 +1,9 @@
 {
-    "name": "@pacepard/accounts",
+    "name": "@onaeko/accounts",
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "description": "Pacepard Accounts — authentication and account management",
+    "description": "Onaeko Accounts — authentication and account management",
     "packageManager": "pnpm@9.15.4",
     "engines": {
         "node": "20.x"
@@ -15,11 +15,11 @@
         "lint": "oxlint",
         "preview": "vite preview --port 5401 --strictPort",
         "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:check": "prettier --check .",
+        "test": "npx --yes tsx --test src/utils/continue.util.test.ts src/api/paths.test.ts src/utils/dev-mock.util.test.ts"
     },
     "dependencies": {
         "@hookform/resolvers": "^5.7.1",
-        "@pacepard/ui": "^0.3.0",
         "@sentry/react": "^10.0.0",
         "@tanstack/react-query": "^5.90.5",
         "axios": "^1.11.0",
@@ -38,7 +38,8 @@
         "universal-cookie": "^8.0.1",
         "uuid": "^11.1.0",
         "zod": "^4.4.3",
-        "zxcvbn": "^4.4.2"
+        "zxcvbn": "^4.4.2",
+        "@pacepard/ui": "^0.3.0"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.1.11",
