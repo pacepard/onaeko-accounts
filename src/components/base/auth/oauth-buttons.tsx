@@ -1,4 +1,4 @@
-import { Button } from '@pacepard/ui/button';
+import { Button } from '@onaeko/ui/button';
 
 interface OAuthButtonsProps {
     className?: string;
