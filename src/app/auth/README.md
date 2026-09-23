@@ -1,6 +1,6 @@
 # Auth pages
 
-Route-level screens for `accounts.pacepard.com` authentication. Each page wraps a form from `src/components/base/auth` in `AuthLayout`.
+Route-level screens for `accounts.onaeko.com` authentication. Each page wraps a form from `src/components/base/auth` in `AuthLayout`.
 
 Browser paths live in `src/routes/paths.ts` (`RouteURL`). Backend paths live in `src/api/paths.ts` (`ApiPath`). Routes are wired in `src/routes/account.route.tsx`.
 
@@ -19,7 +19,7 @@ Browser paths live in `src/routes/paths.ts` (`RouteURL`). Backend paths live in 
 
 - Import forms from `@/components/base/auth/...`
 - Use `RouteURL` for navigation (`navigate`, redirects)
-- Use local `storage` (`@/services/storage`) and `OtpType` (`@/utils/enums.util`) — not `@pacepard/sdk`
+- Use local `storage` (`@/services/storage`) and `OtpType` (`@/utils/enums.util`) — not `@onaeko/sdk`
 - Auth API calls go through `AuthAPI` + `ApiPath` (e.g. `/auth/login`), not page paths
 
 ## Not implemented yet
