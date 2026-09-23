@@ -1,6 +1,8 @@
-# Pacepard Accounts
+# Onaeko Accounts
 
-Vite + React + TypeScript app for **accounts.pacepard.com** — authentication, onboarding, and account settings for Pacepard products.
+Academy pack: see `.academy/` (prompt-plan, idea, specs). Auth lives here; Learn/Website/Admin do not add login screens.
+
+Vite + React + TypeScript app for **accounts.onaeko.com** — authentication, onboarding, and account settings for Onaeko products.
 
 Local default: [http://localhost:5401](http://localhost:5401)
 
@@ -10,7 +12,7 @@ Local default: [http://localhost:5401](http://localhost:5401)
 - React 19
 - TypeScript
 - React Router 7
-- [`@pacepard/ui`](https://www.npmjs.com/package/@pacepard/ui) (npm `^0.3.0`)
+- [`@onaeko/ui`](https://www.npmjs.com/package/@onaeko/ui) (npm `^0.3.0`)
 - react-hook-form + zod + `@hookform/resolvers`
 - axios
 
@@ -18,12 +20,12 @@ Local default: [http://localhost:5401](http://localhost:5401)
 
 - Node `20.x`
 - pnpm `9.15.4` (see `packageManager` in `package.json`)
-- Pacepard API running locally (default in `.env`: `http://localhost:5015/api/v1`)
+- Onaeko API running locally (default in `.env`: `http://localhost:5015/api/v1`)
 
 ## Setup
 
 ```bash
-cd pacepard-accounts
+cd onaeko-accounts
 pnpm install
 cp .env.example .env.local   # optional; edit URLs as needed
 pnpm dev
@@ -38,11 +40,14 @@ Open **http://localhost:5401**.
 | `VITE_APP_API_URL` | Backend API base URL | `http://localhost:5015/api/v1` |
 | `VITE_APP_URL` | This app’s public origin (callbacks) | `http://localhost:5401` |
 | `VITE_ENVIRONMENT` | Runtime env label | `local` / `development` / `staging` / `production` |
-| `VITE_APP_ENVIRONMENT` | Alternate env label (if used) | same as above |
+| `VITE_APP_ENVIRONMENT` | Analytics flag (`prod` turns PostHog/Sentry on) | `dev` locally |
+| `VITE_LEARN_URL` | Learn origin for continue allowlist | `http://localhost:5402` |
+| `VITE_WEBSITE_URL` | Website origin for continue allowlist | `http://localhost:3020` |
+| `VITE_USE_MOCKS` | Local mock rail only. Leave unset for real API. | never on staging/prod |
 
 ## Deploy on Vercel
 
-1. Import the `pacepard-accounts` GitHub repo as a new Vercel project (root = repo root).
+1. Import the `onaeko-accounts` GitHub repo as a new Vercel project (root = repo root).
 2. Framework Preset: **Vite** (or leave auto — `vercel.json` sets `framework`, `buildCommand`, `outputDirectory`).
 3. Add env vars from `.env.example` (Production / Preview as needed). Values are baked in at **build** time.
 4. Deploy. Client routes (`/login`, `/account/*`, …) rewrite to `/index.html` via `vercel.json`.
@@ -84,15 +89,15 @@ Keep these separate:
 | Kind | File | Example | Used by |
 | --- | --- | --- | --- |
 | Browser routes | `src/routes/paths.ts` → `RouteURL` | `/login`, `/account/profile` | `<Route>`, `navigate()`, `<Link>` |
-| Backend paths | `src/api/paths.ts` → `ApiPath` | `/auth/login`, `/users/update-password` | `PacepardAPI` / axios |
+| Backend paths | `src/api/paths.ts` → `ApiPath` | `/auth/login`, `/users/update-password` | `OnaekoAPI` / axios |
 | Absolute callbacks | `RouteURL.regCallback` / `subCallback` | `${VITE_APP_URL}/verify` | OAuth / billing returns |
 
 ```ts
 navigate(RouteURL.login);
-await PacepardAPI.auth.loginUser({ email, password }); // → ApiPath.login
+await OnaekoAPI.auth.loginUser({ email, password }); // → ApiPath.login
 ```
 
-API client: `src/api/base/config.ts` → `PacepardAPI`.
+API client: `src/api/base/config.ts` → `OnaekoAPI`.
 
 ### Auth pages (mounted)
 
@@ -110,9 +115,9 @@ Defined on `RouteURL` but not all mounted yet: `/continue`, `/oauth/*`, onboardi
 ## Conventions
 
 - Path alias: `@/*` → `src/*`
-- Theme: `initTheme('system')` from `@pacepard/ui` in `App.tsx`
-- Import UI from package entries (`@pacepard/ui`, `@pacepard/ui/button`, …), not `@pacepard/ui/components/...`
-- Prefer `@/services/storage` and `@/utils/enums.util` over a missing `@pacepard/sdk` package
+- Theme: `initTheme('system')` from `@onaeko/ui` in `App.tsx`
+- Import UI from package entries (`@onaeko/ui`, `@onaeko/ui/button`, …), not `@onaeko/ui/components/...`
+- Prefer `@/services/storage` and `@/utils/enums.util` over a missing `@onaeko/sdk` package
 - Auth forms live under `src/components/base/auth`; pages under `src/app/auth` only compose layout + form
 
 ## Related apps
