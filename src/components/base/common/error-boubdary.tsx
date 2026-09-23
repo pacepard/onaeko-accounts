@@ -12,7 +12,7 @@ import {
     MessageSquare,
     RefreshCw,
 } from 'lucide-react';
-import { Button, toast } from '@pacepard/ui';
+import { Button, toast } from '@onaeko/ui';
 import { RouteURL } from '@/routes/paths';
 import { NODE_ENV, NodeEnv } from '@/utils/enums.util';
 import * as Sentry from '@sentry/react';
