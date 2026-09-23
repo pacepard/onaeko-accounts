@@ -23,4 +23,4 @@ class APIClient {
 }
 
 /** App-wide API client. */
-export const PacepardAPI = new APIClient();
+export const OnaekoAPI = new APIClient();
