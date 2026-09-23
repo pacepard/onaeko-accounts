@@ -1,7 +1,7 @@
 import useContextType from '@/context/useContextType';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { PacepardAPI } from '@/api/base/config';
+import { OnaekoAPI } from '@/api/base/config';
 import type {
     ActivateDTO,
     ForgotPasswordDTO,
@@ -16,6 +16,7 @@ import { BusinessType, NODE_ENV, NodeEnv, UserType } from '@/utils/enums.util';
 import cookieService from '@/services/cookie.service';
 import storage from '@/services/storage';
 import { RouteURL } from '@/routes/paths';
+import { destinationAfterAuth, goAfterAuth } from '@/utils/post-auth';
 import posthog from 'posthog-js';
 import * as Sentry from '@sentry/react';
 
@@ -109,7 +110,12 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
             if (hasSession) {
                 setIsLoggedIn(true);
                 if (pathname === RouteURL.login || pathname === '/') {
-                    navigate(RouteURL.myAccount);
+                    const dest = destinationAfterAuth(location.search);
+                    if (dest.startsWith('http://') || dest.startsWith('https://')) {
+                        window.location.assign(dest);
+                    } else {
+                        navigate(dest);
+                    }
                 }
             }
             return;
@@ -120,17 +126,16 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
                 pathname.includes(seg),
             );
             if (!isPublic) {
-                void PacepardAPI.auth.logout();
+                void OnaekoAPI.auth.logout();
                 navigate(RouteURL.login);
             }
         } else {
             setIsLoggedIn(true);
-
             if (pathname === RouteURL.login || pathname === '/') {
-                navigate(RouteURL.myAccount);
+                goAfterAuth(destinationAfterAuth(location.search), navigate);
             }
         }
-    }, [enableSessionEffect, location.pathname, navigate]);
+    }, [enableSessionEffect, location.pathname, location.search, navigate]);
 
     const redirect = useCallback(
         (roles: Array<string>) => {
@@ -141,14 +146,14 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
                 if (hasSession) {
                     setIsLoggedIn(true);
                     if (pathname === RouteURL.login || pathname === '/') {
-                        navigate(RouteURL.myAccount);
-                    }
+                    goAfterAuth(destinationAfterAuth(location.search), navigate);
+                }
                 }
                 return;
             }
 
             if (!hasSession) {
-                void PacepardAPI.auth.logout();
+                void OnaekoAPI.auth.logout();
                 navigate(RouteURL.login);
             } else {
                 const ut = cookieService.getUserType();
@@ -157,16 +162,16 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
                 if (token) {
                     if (ut && !roles.includes(ut)) {
                         navigate(RouteURL.login);
-                        void PacepardAPI.auth.logout();
+                        void OnaekoAPI.auth.logout();
                     } else {
                         setIsLoggedIn(true);
 
-                        if (pathname === RouteURL.login || pathname === '/') {
-                            navigate(RouteURL.myAccount);
-                        }
+                    if (pathname === RouteURL.login || pathname === '/') {
+                    goAfterAuth(destinationAfterAuth(location.search), navigate);
+                }
                     }
                 } else {
-                    void PacepardAPI.auth.logout();
+                    void OnaekoAPI.auth.logout();
                     navigate(RouteURL.login);
                 }
             }
@@ -175,7 +180,7 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
     );
 
     const login = async (data: LoginDTO) => {
-        const response = await PacepardAPI.auth.loginUser(data);
+        const response = await OnaekoAPI.auth.loginUser(data);
 
         if (!response.error) {
             if (response.status === 200) {
@@ -238,7 +243,7 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
     };
 
     const logout = async () => {
-        await PacepardAPI.auth.logout();
+        await OnaekoAPI.auth.logout();
         storage.clearAuth();
         clearPrefs();
         if (isProd) {
@@ -253,7 +258,7 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
         async (data: LogoutDTO) => {
             void setLoading({ option: 'default' });
 
-            const response = await PacepardAPI.auth.logoutUser({
+            const response = await OnaekoAPI.auth.logoutUser({
                 userId: data.userId || storage.getUserID(),
             });
             if (!response.error) {
@@ -281,7 +286,7 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
         async (data: RegisterUserDTO) => {
             void setLoading({ option: 'default' });
 
-            const response = await PacepardAPI.auth.registerUser(data);
+            const response = await OnaekoAPI.auth.registerUser(data);
 
             if (!response.error) {
                 setIsLoggedIn(false);
@@ -300,7 +305,7 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
         async (data: VerifyOtpDTO) => {
             void setLoading({ option: 'default' });
 
-            const response = await PacepardAPI.auth.verifyOTP({
+            const response = await OnaekoAPI.auth.verifyOTP({
                 email: data.email,
                 otp: data.otp,
                 otpType: data.otpType,
@@ -321,7 +326,7 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
         async (data: ActivateDTO) => {
             void setLoading({ option: 'default' });
 
-            const response = await PacepardAPI.auth.activateUser({
+            const response = await OnaekoAPI.auth.activateUser({
                 otp: data.otp,
                 otpType: data.otpType,
                 email: data.email,
@@ -343,7 +348,7 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
     const resendOtp = useCallback(
         async (data: ResendOtpDTO) => {
             const { email, otpType } = data;
-            const response = await PacepardAPI.auth.resendOTP({
+            const response = await OnaekoAPI.auth.resendOTP({
                 email,
                 otpType,
             });
@@ -361,7 +366,7 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
         async (data: ForgotPasswordDTO) => {
             void setLoading({ option: 'default' });
 
-            const response = await PacepardAPI.auth.forgotPassword({
+            const response = await OnaekoAPI.auth.forgotPassword({
                 email: data.email,
             });
 
@@ -383,7 +388,7 @@ const useAuth = (options?: { enableSessionEffect?: boolean }) => {
 
             void setLoading({ option: 'default' });
 
-            const response = await PacepardAPI.auth.resetPassword({
+            const response = await OnaekoAPI.auth.resetPassword({
                 newPassword,
                 email,
             });
