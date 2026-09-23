@@ -4,12 +4,12 @@
 
 See [`PRODUCT.md`](./PRODUCT.md) and the normative contract [`DASHBOARD_SHELL_SPEC.md`](./DASHBOARD_SHELL_SPEC.md).
 
-**Stack (from `pacepard-accounts/package.json`):** React 19.2, React Router 7.18, Vite 7, `@pacepard/ui` ^0.3.0 (exports `./sidebar` and `./breadcrumb`).
+**Stack (from `onaeko-accounts/package.json`):** React 19.2, React Router 7.18, Vite 7, `@onaeko/ui` ^0.3.0 (exports `./sidebar` and `./breadcrumb`).
 
 **Commands:**
 
 ```bash
-cd pacepard-accounts
+cd onaeko-accounts
 pnpm typecheck
 pnpm build
 pnpm lint
@@ -41,9 +41,9 @@ No unit-test script exists in this package. Do not add Vitest unless PRODUCT ope
 
 | Source | What to take |
 | ------ | ------------ |
-| Pacepard `apps/main/src/routes/AppRoutes.tsx` | `getAppPages`: `case 'dashboard': case 'home': return <Dashboard />`; wrap authenticated pages in `DashboardLayout` |
-| Pacepard `apps/main/src/app/dashboard/dashboard.tsx` | **Do not copy** the userType switch |
-| Pacepard `apps/main/src/components/blocks/navigation/TopBar.tsx` | **Do not copy** — title + Back is not Troott chrome |
+| Onaeko `apps/main/src/routes/AppRoutes.tsx` | `getAppPages`: `case 'dashboard': case 'home': return <Dashboard />`; wrap authenticated pages in `DashboardLayout` |
+| Onaeko `apps/main/src/app/dashboard/dashboard.tsx` | **Do not copy** the userType switch |
+| Onaeko `apps/main/src/components/blocks/navigation/TopBar.tsx` | **Do not copy** — title + Back is not Troott chrome |
 | Troott `apps/web/src/components/layouts/DashboardLayout.tsx` | Always mount `AppSidebar`; **`NavBar` sibling above `<main>`** |
 | Troott `apps/web/src/components/shared/navigation/NavBar.tsx` | **Canonical top chrome:** Trigger + TopNav left; bell, help, UserAvatar right |
 | Troott `apps/web/src/components/shared/navigation/Trigger.tsx` | `SidebarTrigger` + persist `sidebar-collapsed` |
@@ -52,10 +52,10 @@ No unit-test script exists in this package. Do not add Vitest unless PRODUCT ope
 | Troott `apps/web/src/components/shared/navigation/ActionNav.tsx` | Empty — **do not port** |
 | Troott `apps/web/src/components/shared/navigation/breadcrumb-map.tsx` | Algorithm consumer only — **do not copy keys** |
 | Troott `apps/web/src/components/shared/navigation/Sidebar.tsx` | Header / Main / Footer; data-driven items |
-| `@pacepard/ui/breadcrumb` | `Breadcrumb*` primitives (`aria-label="breadcrumb"`) |
-| `@pacepard/ui/sidebar` | `Sidebar`, `SidebarProvider`, `useSidebar`, `SidebarTrigger`, … |
-| `@pacepard/ui/avatar` | Avatar for `UserAvatar` |
-| `@pacepard/ui/dropdown-menu` | Avatar menu |
+| `@onaeko/ui/breadcrumb` | `Breadcrumb*` primitives (`aria-label="breadcrumb"`) |
+| `@onaeko/ui/sidebar` | `Sidebar`, `SidebarProvider`, `useSidebar`, `SidebarTrigger`, … |
+| `@onaeko/ui/avatar` | Avatar for `UserAvatar` |
+| `@onaeko/ui/dropdown-menu` | Avatar menu |
 
 ---
 
@@ -102,7 +102,7 @@ export function normalizePathname(pathname: string): string {
 ## Proposed structure
 
 ```text
-pacepard-accounts/src/
+onaeko-accounts/src/
   app/
     dashboard/Dashboard.tsx          # body from MyAccount; no layout wrap
     accounts/MyAccount.tsx           # re-export Dashboard OR delete after switch
@@ -114,7 +114,7 @@ pacepard-accounts/src/
   components/base/common/
     Logo.tsx / LogoIcon.tsx          # sidebar header (consume)
   components/base/navigation/
-    side-nav.tsx                     # rewrite: @pacepard/ui/sidebar + flat sidebar.route.ts + Logo
+    side-nav.tsx                     # rewrite: @onaeko/ui/sidebar + flat sidebar.route.ts + Logo
     NavBar.tsx                       # Troott NavBar.tsx composition
     Trigger.tsx                      # Troott Trigger.tsx
     TopNav.tsx                       # Troott TopNav.tsx + Accounts breadcrumb-map + normalize
@@ -201,7 +201,7 @@ Home uses `exact: true`. Children use `exact: false`.
 
 ### `AppSidebar`
 
-Replace the stub `<aside>` with `@pacepard/ui/sidebar` primitives (already imported as `SidebarProvider` in `dashboard-layout.tsx`):
+Replace the stub `<aside>` with `@onaeko/ui/sidebar` primitives (already imported as `SidebarProvider` in `dashboard-layout.tsx`):
 
 - `Sidebar collapsible="icon"`
 - `SidebarHeader`: **`Logo`** when expanded, **`LogoIcon`** when collapsed (`useSidebar().open`); both link to `/my-account`
@@ -211,11 +211,11 @@ Replace the stub `<aside>` with `@pacepard/ui/sidebar` primitives (already impor
 - Footer: `Button` / `SidebarMenuButton` → `logout()` → `/login` (ignore `RouteURL.logout`)
 - Mobile: package sidebar **sheet** below `md`; Trigger in `NavBar` opens/closes; NavBar stays mounted
 
-Do **not** import Pacepard `apps/main` `side-nav.tsx`.
+Do **not** import Onaeko `apps/main` `side-nav.tsx`.
 
 ### Troott `NavBar` (canonical top chrome)
 
-Port structure from Troott files; implement under `src/components/base/navigation/`. Use `@pacepard/ui` for primitives and color tokens.
+Port structure from Troott files; implement under `src/components/base/navigation/`. Use `@onaeko/ui` for primitives and color tokens.
 
 **`DashboardLayout`:** match Troott — column with `NavBar` then `<main>`, not `TopBar` inside `<main>`. Always render `NavBar` (no `hideTopNav`).
 
@@ -247,7 +247,7 @@ useEffect(() => {
 return <SidebarTrigger onClick={() => setOpen(!open)} />;
 ```
 
-Import `SidebarTrigger` / `useSidebar` from `@pacepard/ui/sidebar`.
+Import `SidebarTrigger` / `useSidebar` from `@onaeko/ui/sidebar`.
 
 **`TopNav.tsx`** — copy Troott loop; Accounts map; SPA links; **normalize pathname** first:
 
@@ -265,7 +265,7 @@ const paths = pathParts.map((_, idx) => '/' + pathParts.slice(0, idx + 1).join('
 
 Map: [`src/_data/breadcrumb-map.ts`](../../../src/_data/breadcrumb-map.ts) — keys in DASHBOARD_SHELL_SPEC §4 only.
 
-**`UserAvatar.tsx`** — Troott menu shape (`@pacepard/ui/dropdown-menu` + `@pacepard/ui/avatar`):
+**`UserAvatar.tsx`** — Troott menu shape (`@onaeko/ui/dropdown-menu` + `@onaeko/ui/avatar`):
 
 | Item | Troott | Accounts v1 |
 | ---- | ------ | ----------- |
@@ -285,7 +285,7 @@ Do **not** extend Accounts `TopBar.tsx` into this bar. Remove it from `Dashboard
 2. Session present but onboarding not completed → `getOnboardingRoute(...)`.
 3. Child pages / sidebar / avatar use `logout()` and data helpers only — **do not** remount a second full redirect effect that races the layout.
 
-Do not block `AppSidebar` / `NavBar` on `PacepardAPI.user.getUser()`. Dashboard local loading stays in the main column / Outlet.
+Do not block `AppSidebar` / `NavBar` on `OnaekoAPI.user.getUser()`. Dashboard local loading stays in the main column / Outlet.
 ### Observability
 
 Keep existing PostHog / Sentry identify in `DashboardLayout` (`isProd` only). No new events required in v1.
@@ -348,11 +348,11 @@ If Vitest is added later, first units: `isSidebarPathActive`, breadcrumb path bu
 
 ## Acceptance (engineering)
 
-1. `pnpm typecheck` and `pnpm build` pass in `pacepard-accounts`.
+1. `pnpm typecheck` and `pnpm build` pass in `onaeko-accounts`.
 2. `/my-account` uses `<Dashboard />` as `element`; no `pages.tsx`.
 3. Public `home` at `/` still redirects to login when `IRoute.redirect` is set.
 4. No `DashboardLayout` nested inside `Dashboard`; shell uses **`<Outlet />`**.
-5. Sidebar DOM uses `@pacepard/ui/sidebar` slots; header is **Logo / LogoIcon**.
+5. Sidebar DOM uses `@onaeko/ui/sidebar` slots; header is **Logo / LogoIcon**.
 6. Grep: no second hardcoded nav array that duplicates `sidebar.route.ts` titles/paths; flat Home list.
 7. Troott `NavBar` present on `/my-account` and child paths: Trigger, TopNav landmark, bell/help (`aria-hidden`), UserAvatar.
 8. `NavBar` is not a descendant of scrolling `#dashboard-body` content.
