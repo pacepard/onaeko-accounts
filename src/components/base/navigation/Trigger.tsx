@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { SidebarTrigger, useSidebar } from '@pacepard/ui/sidebar';
+import { SidebarTrigger, useSidebar } from '@onaeko/ui/sidebar';
 import storage from '@/services/storage';
 
 const Trigger = () => {
