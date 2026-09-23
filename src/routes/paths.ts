@@ -1,4 +1,4 @@
-/** Browser / React Router paths for accounts.pacepard.com */
+/** Browser / React Router paths for accounts.onaeko.com */
 
 const AppURL = import.meta.env.VITE_APP_URL ?? '';
 
