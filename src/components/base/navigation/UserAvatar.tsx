@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, LogOut, Shield, User } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@pacepard/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@onaeko/ui/avatar';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -9,7 +9,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@pacepard/ui/dropdown-menu';
+} from '@onaeko/ui/dropdown-menu';
 import useAuth from '@/hooks/app/useAuth';
 import useContextType from '@/context/useContextType';
 import storage from '@/services/storage';
