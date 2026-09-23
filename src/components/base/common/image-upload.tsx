@@ -1,6 +1,6 @@
 import { useRef, type ChangeEvent, type ReactNode } from 'react';
-import { Button } from '@pacepard/ui/button';
-import { cn } from '@pacepard/ui';
+import { Button } from '@onaeko/ui/button';
+import { cn } from '@onaeko/ui';
 
 type ImageUploadProps = {
     value?: string | null;
