@@ -1,7 +1,7 @@
 // src/components/shared/auth/register-form.tsx
-import { Button } from '@pacepard/ui/button';
-import { Input } from '@pacepard/ui/input';
-import { Label } from '@pacepard/ui/label';
+import { Button } from '@onaeko/ui/button';
+import { Input } from '@onaeko/ui/input';
+import { Label } from '@onaeko/ui/label';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,13 +10,16 @@ import type { RegisterFormValues } from './validation';
 import zxcvbn from 'zxcvbn';
 import { Loader2, Mail, Eye, EyeOff, Lock } from 'lucide-react';
 import { strengthColors } from '@/utils/helpers';
-import { OAuthButtons } from './oauth-buttons';
-import { PacepardAPI } from '@/api/base/config';
-import { toast } from '@pacepard/ui';
-import { useNavigate } from 'react-router-dom';
+import { OnaekoAPI } from '@/api/base/config';
+import { toast } from '@onaeko/ui';
+import { useLocation, useNavigate } from 'react-router-dom';
 import storage from '@/services/storage';
+import { persistContinueNext, readNextFromSearch } from '@/utils/continue.util';
+import { RouteURL } from '@/routes/paths';
+import { OAuthButtons } from './oauth-buttons';
 const RegisterForm = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [showPassword, setShowPassword] = useState(false);
     const [passwordScore, setPasswordScore] = useState(0);
@@ -49,7 +52,7 @@ const RegisterForm = () => {
 
     const onSubmit = async (data: RegisterFormValues) => {
         try {
-            const response = await PacepardAPI.auth.registerUser({
+            const response = await OnaekoAPI.auth.registerUser({
                 email: data.email,
                 password: data.password,
             });
@@ -66,7 +69,13 @@ const RegisterForm = () => {
             } else {
                 // Store email so activate-account page can show the correct masked email
                 storage.keepLegacy('userEmail', data.email);
-                navigate('/activate-account');
+                const next = readNextFromSearch(location.search);
+                persistContinueNext(next);
+                const activate =
+                    next != null && next !== ''
+                        ? `${RouteURL.activateAccount}?next=${encodeURIComponent(next)}`
+                        : RouteURL.activateAccount;
+                navigate(activate);
                 toast.success(
                     'Registration successful! Please check your email to verify your account.',
                 );
