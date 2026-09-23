@@ -1,6 +1,6 @@
 # feat-0001: Dashboard shell — route map, sidebar, breadcrumbs
 
-Normative contract for Pacepard Accounts **signed-in home**, **sidebar**, **Troott `NavBar`**, and **breadcrumbs**. Extends [PRODUCT.md](./PRODUCT.md). Implementation notes: [TECH.md](./TECH.md).
+Normative contract for Onaeko Accounts **signed-in home**, **sidebar**, **Troott `NavBar`**, and **breadcrumbs**. Extends [PRODUCT.md](./PRODUCT.md). Implementation notes: [TECH.md](./TECH.md).
 
 This file is the inventory. If PRODUCT and this file disagree, **this file wins** for labels, paths, route `element`s, and NavBar regions.
 
@@ -95,7 +95,7 @@ Legend: **Active** = how the current URL highlights the row.
 | `nav.security` | Security | `/my-account/security` | `security` | prefix `/my-account/security` |
 | `nav.billing` | Billing | `/my-account/billing` | `billing` | prefix `/my-account/billing` |
 
-**Header:** **`Logo`** (expanded) / **`LogoIcon`** (collapsed icon rail) from [`src/components/base/common/Logo.tsx`](../../../src/components/base/common/Logo.tsx) and [`LogoIcon.tsx`](../../../src/components/base/common/LogoIcon.tsx). Link wraps the mark → `/my-account`. Do **not** use plain “Pacepard Accounts” text as the header mark.
+**Header:** **`Logo`** (expanded) / **`LogoIcon`** (collapsed icon rail) from [`src/components/base/common/Logo.tsx`](../../../src/components/base/common/Logo.tsx) and [`LogoIcon.tsx`](../../../src/components/base/common/LogoIcon.tsx). Link wraps the mark → `/my-account`. Do **not** use plain “Onaeko Accounts” text as the header mark.
 
 **Footer:** `Logout` → `useAuth().logout()` → `/login`. Do **not** navigate to `RouteURL.logout` (`/logout`) in v1 — that path is unused; ignore it.
 
@@ -111,7 +111,7 @@ Legend: **Active** = how the current URL highlights the row.
 | ---- | ------ |
 | Learn, Pathfinder | Empty route modules |
 | Sessions, 2FA, change password, invoices, payment methods, delete account | Paths exist on `paths.ts`; no pages yet — do not show until a later feat |
-| Pacepard main Talent / Workspace / Product / Help / Admin | Wrong app |
+| Onaeko main Talent / Workspace / Product / Help / Admin | Wrong app |
 | Troott Dashboard / Sermons / Analytics / Bin / Get Started | Wrong product |
 | Quick Search / ⌘K | Troott feat-0028; not Accounts v1 |
 | Install / footer marketing CTA | Troott-only |
@@ -154,7 +154,7 @@ Normalize pathname before split/map (strip trailing `/` except root) — same as
 
 Home crumb on child pages links to `/my-account`.
 
-**Do not include:** `/dashboard`, `/login`, `/onboarding`, Troott `/studio/...`, Pacepard `/t`, `/b`, `/admin`.
+**Do not include:** `/dashboard`, `/login`, `/onboarding`, Troott `/studio/...`, Onaeko `/t`, `/b`, `/admin`.
 
 ---
 
@@ -185,7 +185,7 @@ NavBar  h-14  full width  border-b  bg-background (Accounts tokens)
 | Help | `NavBar.tsx` `HelpCircleIcon` | Visible, **non-focusable**, `aria-hidden="true"` |
 | `UserAvatar` | `UserAvatar.tsx` | §5.2 |
 
-**Do not port:** Troott `ActionNav.tsx` (empty). Troott `hideTopNav` / `bg-neutral-900`. Pacepard `TopBar` title and Back.
+**Do not port:** Troott `ActionNav.tsx` (empty). Troott `hideTopNav` / `bg-neutral-900`. Onaeko `TopBar` title and Back.
 
 ### 5.2 Avatar menu (decided)
 
@@ -208,7 +208,7 @@ On every `DashboardLayout` route in this feat (`/my-account`, `/my-account/profi
 | Region | Behavior |
 | ------ | -------- |
 | Heading | `Welcome, {displayName}` or `Loading…` |
-| Description | Manage Pacepard account settings and security |
+| Description | Manage Onaeko account settings and security |
 | Profile card | Link to `/my-account/profile` |
 | Security card | Link to `/my-account/security` |
 | Billing card | Link to `/my-account/billing` |
@@ -272,7 +272,7 @@ No full-viewport spinner that hides the sidebar or `NavBar`.
 - Troott `apps/web/src/components/shared/navigation/TopNav.tsx`
 - Troott `apps/web/src/components/shared/navigation/UserAvatar.tsx`
 - Troott `apps/web/src/components/shared/navigation/breadcrumb-map.tsx` (algorithm only — different keys)
-- Pacepard `apps/main/src/routes/AppRoutes.tsx` (`case 'home'` / `case 'dashboard'`)
+- Onaeko `apps/main/src/routes/AppRoutes.tsx` (`case 'home'` / `case 'dashboard'`)
 
 ---
 
@@ -288,7 +288,7 @@ No full-viewport spinner that hides the sidebar or `NavBar`.
 | 6 | `errorElement` / data router | **Out of scope** for feat-0001. Keep `AppErrorBoundary`. `errorElement` on `base.route` stays inert until a later `useRoutes` / `createBrowserRouter` feat. |
 | 7 | Sidebar icons | **Text-only** rows in v1. Brand = **Logo / LogoIcon**. |
 | 8 | Sidebar tree | Flatten to **Home + siblings** (parent = Home link). |
-| 9 | Mobile sheet | `@pacepard/ui` sidebar sheet; **Trigger** toggles; overlay + dismiss (sheet defaults); **NavBar remains visible**. |
+| 9 | Mobile sheet | `@onaeko/ui` sidebar sheet; **Trigger** toggles; overlay + dismiss (sheet defaults); **NavBar remains visible**. |
 | 10 | Trailing slash | Normalize: `pathname.replace(/\/+$/, '') \|\| '/'` before active + breadcrumb logic. |
 | 11 | Incomplete onboarding | Layout/shell gate → **`getOnboardingRoute`**; do not show Dashboard. |
 | 12 | `useAuth` ownership | **Layout owns** session redirect effect. Pages/sidebar/avatar call `logout` / read helpers only — avoid duplicate navigate effects. |
