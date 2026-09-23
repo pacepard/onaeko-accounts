@@ -1,6 +1,7 @@
 import cookieService from './cookie.service';
 import type { IStorage } from '@/utils/interfaces.util';
 import { logger } from '@/utils/logger.utl';
+import { DEV_MOCK_TOKEN, USE_MOCKS } from '@/utils/dev-mock.util';
 
 const storeAuth = (
     token: string,
@@ -44,6 +45,11 @@ const checkToken = () => {
     const token = localStorage.getItem('token');
     if (!token || token.trim() === '') {
         return false;
+    }
+
+    // P083 mock rail plants a non-JWT placeholder when USE_MOCKS is on.
+    if (USE_MOCKS && token === DEV_MOCK_TOKEN) {
+        return true;
     }
 
     // Basic JWT token validation (should have 3 parts separated by dots)
@@ -228,6 +234,7 @@ const debugAuth = () => {
  * Use after login or activation when the backend returns { data: { token, _id, userType, email, businessType? } }.
  */
 export const persistAuthFromResponse = (response: {
+    token?: string;
     data?: {
         token?: string;
         _id?: string;
@@ -237,10 +244,11 @@ export const persistAuthFromResponse = (response: {
         businessType?: string;
     };
 }) => {
-    if (response?.data?.token) {
-        const d = response.data;
+    const token = response?.data?.token || response?.token;
+    if (token) {
+        const d = response.data || {};
         storeAuth(
-            d.token!,
+            token,
             d._id ?? d.id ?? '',
             d.userType ?? '',
             d.email ?? '',
