@@ -2,17 +2,17 @@
 
 ## Summary
 
-Signed-in users on **Pacepard Accounts** land on a **Dashboard** page inside a stable authenticated shell: collapsible **left sidebar** + **Troott `NavBar`** (collapse trigger, breadcrumbs, bell, help, user avatar). Route names `home` and `dashboard` (and the existing `my-account` alias) render `<Dashboard />`.
+Signed-in users on **Onaeko Accounts** land on a **Dashboard** page inside a stable authenticated shell: collapsible **left sidebar** + **Troott `NavBar`** (collapse trigger, breadcrumbs, bell, help, user avatar). Route names `home` and `dashboard` (and the existing `my-account` alias) render `<Dashboard />`.
 
-This is the accounts product home — not Troott studio home, and not the Pacepard `apps/main` talent / business / admin product dashboards.
+This is the accounts product home — not Troott studio home, and not the Onaeko `apps/main` talent / business / admin product dashboards.
 
 ## Problem
 
 | Today | Gap |
 | ----- | --- |
 | [`base.route.tsx`](../../../src/routes/base.route.tsx) `name: 'home'` at `/` **redirects to login** | Correct for visitors with no session. There is no authenticated `home` → `<Dashboard />` mapping. |
-| Post-login destination is [`RouteURL.myAccount`](../../../src/routes/paths.ts) (`/my-account`) via [`getOnboardingRoute`](../../../src/utils/onboarding.ts) and [`useAuth`](../../../src/hooks/app/useAuth.ts) | Page is [`MyAccount.tsx`](../../../src/app/accounts/MyAccount.tsx), which **embeds** `DashboardLayout`. Pacepard `apps/main` wraps layout at the **route** layer and maps `case 'home'` / `case 'dashboard'` to `<Dashboard />`. |
-| [`side-nav.tsx`](../../../src/components/base/navigation/side-nav.tsx) is a hardcoded `<aside>` (`hidden md:flex`) | Ignores [`sidebar.route.ts`](../../../src/routes/sidebar.route.ts), `@pacepard/ui/sidebar` primitives, collapse, mobile sheet, footer logout. `DashboardLayout` already mounts `SidebarProvider`. |
+| Post-login destination is [`RouteURL.myAccount`](../../../src/routes/paths.ts) (`/my-account`) via [`getOnboardingRoute`](../../../src/utils/onboarding.ts) and [`useAuth`](../../../src/hooks/app/useAuth.ts) | Page is [`MyAccount.tsx`](../../../src/app/accounts/MyAccount.tsx), which **embeds** `DashboardLayout`. Onaeko `apps/main` wraps layout at the **route** layer and maps `case 'home'` / `case 'dashboard'` to `<Dashboard />`. |
+| [`side-nav.tsx`](../../../src/components/base/navigation/side-nav.tsx) is a hardcoded `<aside>` (`hidden md:flex`) | Ignores [`sidebar.route.ts`](../../../src/routes/sidebar.route.ts), `@onaeko/ui/sidebar` primitives, collapse, mobile sheet, footer logout. `DashboardLayout` already mounts `SidebarProvider`. |
 | [`TopBar.tsx`](../../../src/components/base/navigation/TopBar.tsx) is a page title only | **Wrong chrome.** Troott `apps/web` uses `NavBar` (`Trigger` + `TopNav` + bell/help + `UserAvatar`), mounted as a **sibling above `<main>`**, not a title bar inside main. |
 | Sidebar lists Profile / Security / Billing | Those paths exist in `paths.ts` and `sidebar.route.ts`, but **no route elements** — links 404. |
 
@@ -58,11 +58,11 @@ Onboarding routes stay on [`OnboardingLayout`](../../../src/components/layouts/o
 
 6. Dashboard is **page content only**. It must **not** wrap itself in `DashboardLayout`. The authenticated shell is Troott-style: **`DashboardLayout` + `<Outlet />`**; Dashboard / Profile / Security / Billing are child route elements only.
 
-7. **Do not** port Pacepard `apps/main` `src/app/dashboard/dashboard.tsx` userType switch (`Admin` / `BusinessDashboard` / `TalentDashboard` / `GuestDashboard` / `UserDashboard`). Those screens are a different app.
+7. **Do not** port Onaeko `apps/main` `src/app/dashboard/dashboard.tsx` userType switch (`Admin` / `BusinessDashboard` / `TalentDashboard` / `GuestDashboard` / `UserDashboard`). Those screens are a different app.
 
 8. **Do not** port Troott studio `apps/web/src/app/dashboard/Dashboard.tsx` (sermon upload empty state).
 
-9. User display name and email come from `PacepardAPI.user.getUser()` with storage fallback (existing MyAccount behavior). Loading copy: `Loading…` until that fetch settles.
+9. User display name and email come from `OnaekoAPI.user.getUser()` with storage fallback (existing MyAccount behavior). Loading copy: `Loading…` until that fetch settles.
 
 10. Sign out on the Session card calls `useAuth().logout()` (existing). Sidebar footer Logout and `UserAvatar` Logout use the same function (Behaviors 15 and 28).
 
@@ -72,7 +72,7 @@ Onboarding routes stay on [`OnboardingLayout`](../../../src/components/layouts/o
 
 12. **Always mount `AppSidebar`** inside `DashboardLayout` (Troott `specs/web/feature/feat-0034` rule, applied here). No route unmounts the portal sidebar.
 
-13. **Top chrome is Troott `NavBar`, not Pacepard `TopBar`.** Source of truth:
+13. **Top chrome is Troott `NavBar`, not Onaeko `TopBar`.** Source of truth:
 
     | Piece | Troott file (`apps/web/src/components/…`) | Role |
     | ----- | ----------------------------------------- | ---- |
@@ -83,7 +83,7 @@ Onboarding routes stay on [`OnboardingLayout`](../../../src/components/layouts/o
     | Avatar menu | `shared/navigation/UserAvatar.tsx` | Dropdown: Profile, Settings-equivalent, Logout |
     | Unused | `shared/navigation/ActionNav.tsx` | Empty stub — **do not port** |
 
-    Pacepard `apps/main` `TopBar.tsx` (title + ChevronsLeft + optional Back) is **out of scope**. Do not merge it with Troott `NavBar`.
+    Onaeko `apps/main` `TopBar.tsx` (title + ChevronsLeft + optional Back) is **out of scope**. Do not merge it with Troott `NavBar`.
 
 14. Accounts **v1 always shows `NavBar`** on `DashboardLayout` routes. Do not port Troott `hideTopNav` / full-bleed canvas (sermon library, profile, settings). Accounts has no equivalent waiver.
 
@@ -99,7 +99,7 @@ Onboarding routes stay on [`OnboardingLayout`](../../../src/components/layouts/o
 
 16. **No page title** in the top bar. Troott `NavBar` does not render `pageTitle`. Breadcrumbs are the only location chrome. Do not keep Accounts `TopBar` heading beside `TopNav`.
 
-17. **No Back button** in the top bar or layout. Troott `NavBar` has none; intermediate breadcrumbs replace Pacepard `showBack`. Do **not** pass or honor a `back` prop for chrome.
+17. **No Back button** in the top bar or layout. Troott `NavBar` has none; intermediate breadcrumbs replace Onaeko `showBack`. Do **not** pass or honor a `back` prop for chrome.
 
 18. Main content scrolls independently of the sidebar **and** of `NavBar` (`NavBar` stays put; `<main>` overflows). Collapse preference: `Trigger` keeps `sidebar-collapsed` in sync with `useSidebar().open` (Troott `Trigger.tsx`). `DashboardLayout` still reads that key for `SidebarProvider defaultOpen`.
 
@@ -109,9 +109,9 @@ Onboarding routes stay on [`OnboardingLayout`](../../../src/components/layouts/o
 
 20. Sidebar appears only inside `DashboardLayout`.
 
-21. Sidebar is **collapsible** (`collapsible="icon"` on `@pacepard/ui/sidebar`). Collapsed items expose a tooltip (shadcn Sidebar default).
+21. Sidebar is **collapsible** (`collapsible="icon"` on `@onaeko/ui/sidebar`). Collapsed items expose a tooltip (shadcn Sidebar default).
 
-22. **Header:** **`Logo`** (expanded) / **`LogoIcon`** (collapsed rail) from `src/components/base/common/Logo.tsx` and `LogoIcon.tsx`. Wrapped in a link to `/my-account`. Do not use plain “Pacepard Accounts” text as the mark.
+22. **Header:** **`Logo`** (expanded) / **`LogoIcon`** (collapsed rail) from `src/components/base/common/Logo.tsx` and `LogoIcon.tsx`. Wrapped in a link to `/my-account`. Do not use plain “Onaeko Accounts” text as the mark.
 
 23. **Main group** (v1 — single group, all signed-in users):
 
@@ -130,7 +130,7 @@ Onboarding routes stay on [`OnboardingLayout`](../../../src/components/layouts/o
 
 26. v1 does **not** filter Main items by `UserType`. All authenticated Accounts roles see the same four items.
 
-27. **Out of sidebar v1:** Learn, Pathfinder (`learn.route.tsx` / `pathfinder.route.tsx` are empty), Pacepard `apps/main` Talent / Workspace / Product / Help / Admin trees, Troott Get Started / Sermons / Analytics / Bin, command palette (Troott feat-0028).
+27. **Out of sidebar v1:** Learn, Pathfinder (`learn.route.tsx` / `pathfinder.route.tsx` are empty), Onaeko `apps/main` Talent / Workspace / Product / Help / Admin trees, Troott Get Started / Sermons / Analytics / Bin, command palette (Troott feat-0028).
 
 28. **Footer:** Logout for every role that sees this shell. Calls `useAuth().logout()` → `/login` — never `href="#"`, never `RouteURL.logout`. Same logout as `UserAvatar` (Behavior 15).
 
@@ -150,9 +150,9 @@ Onboarding routes stay on [`OnboardingLayout`](../../../src/components/layouts/o
     4. Last crumb is `BreadcrumbPage` (`aria-current="page"`). Earlier crumbs are links.
     5. Separator between items (design-system `BreadcrumbSeparator`).
 
-33. SPA adaptation (Troott uses `<BreadcrumbLink href={path}>`, which reloads): Accounts must use `@pacepard/ui/breadcrumb` `BreadcrumbLink` with `asChild` + React Router `Link`. Structure stays Troott; navigation stays client-side. Normalize pathname before building crumbs ([DASHBOARD_SHELL_SPEC §11](./DASHBOARD_SHELL_SPEC.md#11-resolved-gap-decisions-118) #10).
+33. SPA adaptation (Troott uses `<BreadcrumbLink href={path}>`, which reloads): Accounts must use `@onaeko/ui/breadcrumb` `BreadcrumbLink` with `asChild` + React Router `Link`. Structure stays Troott; navigation stays client-side. Normalize pathname before building crumbs ([DASHBOARD_SHELL_SPEC §11](./DASHBOARD_SHELL_SPEC.md#11-resolved-gap-decisions-118) #10).
 
-34. Landmark: `nav` with `aria-label="breadcrumb"` (already on `@pacepard/ui/breadcrumb` `Breadcrumb`).
+34. Landmark: `nav` with `aria-label="breadcrumb"` (already on `@onaeko/ui/breadcrumb` `Breadcrumb`).
 
 35. Normative labels: [DASHBOARD_SHELL_SPEC §4](./DASHBOARD_SHELL_SPEC.md#4-breadcrumb-map-v1).
 
@@ -192,15 +192,15 @@ Onboarding routes stay on [`OnboardingLayout`](../../../src/components/layouts/o
 
 ## Non-goals
 
-- Pacepard `apps/main` role-switched product dashboards (admin console, talent home, business home, hackathons, inbox).
-- Pacepard `apps/main` `TopBar.tsx` (page title, ChevronsLeft, Back).
+- Onaeko `apps/main` role-switched product dashboards (admin console, talent home, business home, hackathons, inbox).
+- Onaeko `apps/main` `TopBar.tsx` (page title, ChevronsLeft, Back).
 - Troott studio URLs (`/studio/{code}`), sermon upload, Get Started hub, sidebar search palette, `ActionNav`, `hideTopNav` full-bleed.
 - Wiring Bell / Help to real notification or help routes (icons only, like Troott today).
 - Auth forms, OTP, OAuth (existing auth pages).
 - Completing Profile / Security / Billing product forms.
 - Learn / Pathfinder nav (`learn.route.tsx` / `pathfinder.route.tsx` empty).
 - Adding a public `/dashboard` path.
-- Figma file (none provided). Baseline: current MyAccount cards + Troott `NavBar` composition + `@pacepard/ui` tokens (do not require Troott `bg-neutral-900`).
+- Figma file (none provided). Baseline: current MyAccount cards + Troott `NavBar` composition + `@onaeko/ui` tokens (do not require Troott `bg-neutral-900`).
 
 ## Figma
 
@@ -229,9 +229,9 @@ Figma: none provided.
 | Logout path | `useAuth().logout()` → `/login` | Ignore `RouteURL.logout` in v1 |
 | Pathname normalize | Strip trailing `/` | Active + breadcrumbs |
 | Session / onboarding gate | Layout owns `useAuth` + incomplete → `getOnboardingRoute` | Single owner; shell-first |
-| Mobile | Sheet below `md`; rail `collapsible="icon"` desktop; NavBar stays up | `@pacepard/ui` sidebar defaults |
+| Mobile | Sheet below `md`; rail `collapsible="icon"` desktop; NavBar stays up | `@onaeko/ui` sidebar defaults |
 | Main landmark | **`main#dashboard-body`** | a11y / QA |
-| Visual tokens | `@pacepard/ui` | Copy Troott **structure**, not `bg-neutral-900` |
+| Visual tokens | `@onaeko/ui` | Copy Troott **structure**, not `bg-neutral-900` |
 | Avatar photo | User from `getUser` / storage; fallback initials | Do not copy Troott `shadcn.png` |
 | Roles | Same Main nav for all Accounts `UserType`s | Identity app |
 | Child pages | Single-`h1` stubs | Sidebar/breadcrumbs/avatar must not 404 |
@@ -253,7 +253,7 @@ Figma: none provided.
 - [ ] Logout from sidebar footer, avatar menu, and Dashboard Session card all return to login (not `/logout`).
 - [ ] Accounts `TopBar` page-title chrome is gone from `DashboardLayout`.
 - [ ] Gap table [DASHBOARD_SHELL_SPEC §11](./DASHBOARD_SHELL_SPEC.md#11-resolved-gap-decisions-118) satisfied.
-- [ ] `pnpm typecheck` and `pnpm build` in `pacepard-accounts` pass.
+- [ ] `pnpm typecheck` and `pnpm build` in `onaeko-accounts` pass.
 
 ## Open questions
 
@@ -272,4 +272,4 @@ None for feat-0001 v1 — see Resolved product decisions and [DASHBOARD_SHELL_SP
 - Troott `specs/web/feature/feat-0002` — portal sidebar + top navigation bar
 - Troott `specs/web/feature/feat-0034` — always mount sidebar
 - Troott `specs/web/feature/feat-0036` — shell-first loading
-- Pacepard `apps/main/src/routes/AppRoutes.tsx` (`case 'home'` / `case 'dashboard'`)
+- Onaeko `apps/main/src/routes/AppRoutes.tsx` (`case 'home'` / `case 'dashboard'`)
