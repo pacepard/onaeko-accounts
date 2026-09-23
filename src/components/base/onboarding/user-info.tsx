@@ -1,20 +1,20 @@
 import { RouteURL } from '@/routes/paths';
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@pacepard/ui/button';
+import { Button } from '@onaeko/ui/button';
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@pacepard/ui/select';
-import { Label } from '@pacepard/ui/label';
+} from '@onaeko/ui/select';
+import { Label } from '@onaeko/ui/label';
 import { UserType } from '@/utils/enums.util';
 import UserContext from '@/context/user/userContext';
 import storage from '@/services/storage';
-import { PacepardAPI } from '@/api/base/config';
-import { toast } from '@pacepard/ui';
+import { OnaekoAPI } from '@/api/base/config';
+import { toast } from '@onaeko/ui';
 import { getOnboardingRoute } from '@/utils/onboarding';
 
 interface Specialty {
@@ -47,7 +47,7 @@ const specialties: Specialty[] = [
 const roles: Interest[] = [
     { value: 'individual-contributor', label: 'Individual Contributor' },
     { value: 'team-lead', label: 'Team Lead' },
-    { value: 'using-just-myself', label: 'Using Pacepard just for myself' },
+    { value: 'using-just-myself', label: 'Using Onaeko just for myself' },
     { value: 'freelancer', label: 'Freelancer' },
     { value: 'student', label: 'Student' },
     { value: 'other', label: 'Other' },
@@ -115,7 +115,7 @@ const UserInfo: React.FC = () => {
 
             try {
                 const statusResponse =
-                    await PacepardAPI.user.getOnboardingStatus();
+                    await OnaekoAPI.user.getOnboardingStatus();
 
                 if (statusResponse.error === false && statusResponse.data) {
                     const statusData = statusResponse.data as any;
@@ -151,7 +151,7 @@ const UserInfo: React.FC = () => {
             setIsLoading(true);
             setError(''); // Clear any previous errors
             try {
-                const response = await PacepardAPI.user.setUserInfo({
+                const response = await OnaekoAPI.user.setUserInfo({
                     specialty: workType,
                     role: role,
                     discovery: discovery,
@@ -172,7 +172,7 @@ const UserInfo: React.FC = () => {
                         nextRoute = RouteURL.onboardingBusinessInfo;
                     } else {
                         const statusResponse =
-                            await PacepardAPI.user.getOnboardingStatus();
+                            await OnaekoAPI.user.getOnboardingStatus();
                         if (
                             statusResponse.error === false &&
                             statusResponse.data
@@ -299,7 +299,7 @@ const UserInfo: React.FC = () => {
                             htmlFor="discovery"
                             className="text-sm font-medium text-foreground"
                         >
-                            How did you discover Pacepard?
+                            How did you discover Onaeko?
                         </Label>
                         <Select value={discovery} onValueChange={setDiscovery}>
                             <SelectTrigger
