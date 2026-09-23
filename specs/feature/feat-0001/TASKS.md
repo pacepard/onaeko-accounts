@@ -59,7 +59,7 @@
 
 ### Task 3: Data-driven AppSidebar + Logo
 
-**Description:** Rewrite `side-nav.tsx` to `@pacepard/ui/sidebar` primitives. Read items from `sidebar.route.ts` and **flatten** to Home + siblings. Parent title **Home**. Header: **`Logo` / `LogoIcon`** linked to `/my-account`. Active rules + `normalizePathname` from DASHBOARD_SHELL_SPEC §3 / §11. Footer Logout → `useAuth().logout()` → `/login` (not `/logout`). Text-only rows. Mobile sheet via package sidebar (Trigger); NavBar stays visible.
+**Description:** Rewrite `side-nav.tsx` to `@onaeko/ui/sidebar` primitives. Read items from `sidebar.route.ts` and **flatten** to Home + siblings. Parent title **Home**. Header: **`Logo` / `LogoIcon`** linked to `/my-account`. Active rules + `normalizePathname` from DASHBOARD_SHELL_SPEC §3 / §11. Footer Logout → `useAuth().logout()` → `/login` (not `/logout`). Text-only rows. Mobile sheet via package sidebar (Trigger); NavBar stays visible.
 
 **Acceptance criteria:**
 
@@ -87,7 +87,7 @@
 
 ### Task 4: Port Troott NavBar, Trigger, TopNav, UserAvatar
 
-**Description:** Replace Accounts `TopBar` in `DashboardLayout` with Troott top chrome. Add `NavBar.tsx`, `Trigger.tsx`, `TopNav.tsx`, `UserAvatar.tsx` matching [DASHBOARD_SHELL_SPEC §5](./DASHBOARD_SHELL_SPEC.md#5-troott-navbar-v1). Mount `NavBar` as a **sibling above `<main#dashboard-body>`**. Add `src/_data/breadcrumb-map.ts` (§4). Bell/Help: **`aria-hidden="true"`**. Avatar: Profile, **Security**, Logout. Do not port `ActionNav`, `hideTopNav`, or Pacepard `TopBar` Back/title.
+**Description:** Replace Accounts `TopBar` in `DashboardLayout` with Troott top chrome. Add `NavBar.tsx`, `Trigger.tsx`, `TopNav.tsx`, `UserAvatar.tsx` matching [DASHBOARD_SHELL_SPEC §5](./DASHBOARD_SHELL_SPEC.md#5-troott-navbar-v1). Mount `NavBar` as a **sibling above `<main#dashboard-body>`**. Add `src/_data/breadcrumb-map.ts` (§4). Bell/Help: **`aria-hidden="true"`**. Avatar: Profile, **Security**, Logout. Do not port `ActionNav`, `hideTopNav`, or Onaeko `TopBar` Back/title.
 
 **Acceptance criteria:**
 
@@ -147,7 +147,7 @@
 **Verification:**
 
 ```bash
-cd pacepard-accounts && pnpm typecheck && pnpm lint && pnpm build
+cd onaeko-accounts && pnpm typecheck && pnpm lint && pnpm build
 ```
 
 **Dependencies:** Tasks 1–5
