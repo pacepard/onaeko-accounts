@@ -4,21 +4,21 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Button } from '@pacepard/ui/button';
-import { Input } from '@pacepard/ui/input';
-import { Label } from '@pacepard/ui/label';
+import { Button } from '@onaeko/ui/button';
+import { Input } from '@onaeko/ui/input';
+import { Label } from '@onaeko/ui/label';
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@pacepard/ui/select';
-import { cn } from '@pacepard/ui';
-import { PacepardAPI } from '@/api/base/config';
+} from '@onaeko/ui/select';
+import { cn } from '@onaeko/ui';
+import { OnaekoAPI } from '@/api/base/config';
 import { UserType } from '@/utils/enums.util';
 import storage from '@/services/storage';
-import { toast } from '@pacepard/ui';
+import { toast } from '@onaeko/ui';
 import { getOnboardingRoute } from '@/utils/onboarding';
 
 const businessInfoSchema = z.object({
@@ -71,7 +71,7 @@ const BusinessInfo: React.FC = () => {
 
             try {
                 const statusResponse =
-                    await PacepardAPI.user.getOnboardingStatus();
+                    await OnaekoAPI.user.getOnboardingStatus();
 
                 if (statusResponse.error === false && statusResponse.data) {
                     const statusData = statusResponse.data as any;
@@ -130,7 +130,7 @@ const BusinessInfo: React.FC = () => {
     const onSubmit = async (data: BusinessInfoFormValues) => {
         setIsLoading(true);
         try {
-            const response = await PacepardAPI.user.setBusinessInfo({
+            const response = await OnaekoAPI.user.setBusinessInfo({
                 businessName: data.businessName,
                 businessType: data.businessType,
                 industry: data.industry,
