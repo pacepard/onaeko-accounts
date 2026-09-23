@@ -4,18 +4,25 @@ import type { IAPIResponse } from '@/utils/interfaces.util';
 import Axios from 'axios';
 import { ApiPath } from '@/api/paths';
 import { logger } from '@/utils/logger.utl';
+import { USE_MOCKS, mockCall } from '@/utils/dev-mock.util';
 
 class AxiosService {
     
     public baseUrl: string;
     constructor() {
+        if (USE_MOCKS) {
+            this.baseUrl = import.meta.env.VITE_APP_API_URL || '';
+            logger.debug('AxiosService initialized (mock rail)', {
+                baseUrl: this.baseUrl || '(omitted)',
+            });
+            return;
+        }
 
         if (!import.meta.env.VITE_APP_API_URL) {
             logger.error('API base url not defined');
             throw new Error('API base url not defined')
         }
 
-        Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
         this.baseUrl = import.meta.env.VITE_APP_API_URL;
         logger.debug('AxiosService initialized', { baseUrl: this.baseUrl });
 
@@ -26,6 +33,10 @@ class AxiosService {
      * @returns
      */
     public async call(params: CallApiDTO): Promise<IAPIResponse> {
+        if (USE_MOCKS) {
+            return mockCall(params) as Promise<IAPIResponse>;
+        }
+
         let result: any = {};
         const { isAuth = false, method, path, type, payload } = params;
 
