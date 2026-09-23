@@ -1,4 +1,4 @@
-import { Button, Spacer } from '@pacepard/ui';
+import { Button, Spacer } from '@onaeko/ui';
 import { RouteURL } from '@/routes/paths';
 import { TriangleAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';
