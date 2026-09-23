@@ -1,5 +1,5 @@
 // src/components/shared/auth/register-form.tsx
-import { Button, Input, Label } from '@pacepard/ui';
+import { Button, Input, Label } from '@onaeko/ui';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,7 +8,7 @@ import type { VerifyOtpFormValues } from './validation';
 import { Loader2 } from 'lucide-react';
 import { OtpType } from '@/utils/enums.util';
 import storage, { persistAuthFromResponse } from '@/services/storage';
-import { PacepardAPI } from '@/api/base/config';
+import { OnaekoAPI } from '@/api/base/config';
 export interface IForm extends React.ComponentProps<'form'> {
     className?: string;
     email?: string;
@@ -100,7 +100,7 @@ const ActivateUserForm = (data: IForm) => {
     const onSubmit = async ({ otp }: VerifyOtpFormValues) => {
         const cleanedEmail = cleanEmail();
 
-        const response = await PacepardAPI.auth.activateUser({
+        const response = await OnaekoAPI.auth.activateUser({
             email: cleanedEmail,
             otp: Number(otp),
             otpType: OtpType.ACTIVATEACCOUNT,
