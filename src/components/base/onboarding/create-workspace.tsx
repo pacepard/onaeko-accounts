@@ -3,14 +3,14 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@pacepard/ui/button';
-import { Input } from '@pacepard/ui/input';
-import { Label } from '@pacepard/ui/label';
+import { Button } from '@onaeko/ui/button';
+import { Input } from '@onaeko/ui/input';
+import { Label } from '@onaeko/ui/label';
 import { ImageUpload } from '@/components/base/common/image-upload';
-import { toast } from '@pacepard/ui';
-import { PacepardAPI } from '@/api/base/config';
+import { toast } from '@onaeko/ui';
+import { OnaekoAPI } from '@/api/base/config';
 import { createWorkspaceSchema, type CreateWorkspaceFormValues } from './validation';
-import { cn } from '@pacepard/ui';
+import { cn } from '@onaeko/ui';
 import { UserType } from '@/utils/enums.util';
 import UserContext from '@/context/user/userContext';
 import storageUtil from '@/services/storage';
@@ -53,7 +53,7 @@ const CreateWorkspace: React.FC = () => {
 
             try {
                 const statusResponse =
-                    await PacepardAPI.user.getOnboardingStatus();
+                    await OnaekoAPI.user.getOnboardingStatus();
 
                 if (statusResponse.error === false && statusResponse.data) {
                     const statusData = statusResponse.data as any;
@@ -159,7 +159,7 @@ const CreateWorkspace: React.FC = () => {
                 formData.append('file', file);
 
                 const response =
-                    await PacepardAPI.storage.uploadImage(formData);
+                    await OnaekoAPI.storage.uploadImage(formData);
 
                 if (response.error === false && response.data) {
                     setUploadedImageData(response.data);
@@ -215,7 +215,7 @@ const CreateWorkspace: React.FC = () => {
             }
 
             const response =
-                await PacepardAPI.workspace.createWorkspace(payload);
+                await OnaekoAPI.workspace.createWorkspace(payload);
 
             if (
                 response.error === false &&
