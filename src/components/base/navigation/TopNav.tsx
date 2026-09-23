@@ -5,7 +5,7 @@ import {
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator,
-} from '@pacepard/ui/breadcrumb';
+} from '@onaeko/ui/breadcrumb';
 import { Link, useLocation } from 'react-router-dom';
 import BreadcrumbMap from '@/_data/breadcrumb-map';
 import { normalizePathname } from '@/utils/pathname.util';
