@@ -1,6 +1,6 @@
-# Accounts specs (`pacepard-accounts`)
+# Accounts specs (`onaeko-accounts`)
 
-Product and technical specifications for **Pacepard Accounts** (`accounts.pacepard.com`).
+Product and technical specifications for **Onaeko Accounts** (`accounts.onaeko.com`).
 
 Spec layout matches Troott web specs (`PRODUCT` + `TECH` + optional `TASKS` + a normative contract when the inventory must be exact).
 
@@ -18,12 +18,12 @@ Spec layout matches Troott web specs (`PRODUCT` + `TECH` + optional `TASKS` + a 
 2. Write **PRODUCT** first (what / why / for whom). **TECH** is how we implement and verify it in this repo. **TASKS** is the ordered implementation list.
 3. Link PRODUCT ↔ TECH ↔ TASKS with relative paths.
 4. Keep specs accurate after ship; mark completed success criteria with `[x]`.
-5. Do not invent product surfaces that belong to other Pacepard apps (`apps/main` talent / business / admin dashboards, Troott studio sermons). Cite source files instead.
+5. Do not invent product surfaces that belong to other Onaeko apps (`apps/main` talent / business / admin dashboards, Troott studio sermons). Cite source files instead.
 
 ## Source context (do not copy blindly)
 
 | Source | Role |
 | ------ | ---- |
-| `pacepard-accounts` | Implementation target |
-| `/Users/pro/Documents/madebydamola/learn/pacepard` | Routing pattern (explicit route `element`s, not a page switch), `DashboardLayout`, shadcn sidebar |
+| `onaeko-accounts` | Implementation target |
+| `/Users/pro/Documents/madebydamola/learn/onaeko` | Routing pattern (explicit route `element`s, not a page switch), `DashboardLayout`, shadcn sidebar |
 | `/Users/pro/Documents/madebydamola/learn/troott/apps/web` | Portal shell: always-mounted sidebar; **top chrome is Troott `NavBar`** (`Trigger` + `TopNav` breadcrumbs + bell/help + `UserAvatar`) |
